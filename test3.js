@@ -1,0 +1,1 @@
+console.log('hidden script connected from other js script')
