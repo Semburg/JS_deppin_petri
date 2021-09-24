@@ -16,4 +16,4 @@ function loadScript(src) {
 
 loadScript('test3.js')
 
-// END PART 2 -  next - 3.036
+// END PART 2 -  next - 3.037
