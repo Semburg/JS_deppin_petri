@@ -48,20 +48,20 @@ window.addEventListener('DOMContentLoaded', () => {
         const t = Date.parse(endtime) - Date.parse(new Date()),
             days = Math.floor(t / (1000 * 60 * 60 * 24)),
             hours = Math.floor((t / (1000 * 60 * 60) % 24)),
-            minutes = Math.floor((t / (1000 * 60 ) % 60)),
+            minutes = Math.floor((t / (1000 * 60) % 60)),
             seconds = Math.floor((t / 1000 % 60));
-            return {
-                'total': t,
-                'days': days,
-                'hours': hours,
-                'minutes': minutes,
-                'seconds': seconds
-            }
+        return {
+            'total': t,
+            'days': days,
+            'hours': hours,
+            'minutes': minutes,
+            'seconds': seconds
+        }
     }
 
     // HELPER function for one number cases (addition '0')
     function getZero(num) {
-        if(num >= 0 && num < 10) {
+        if (num >= 0 && num < 10) {
             return `0${num}`
         } else {
             return num;
@@ -88,12 +88,62 @@ window.addEventListener('DOMContentLoaded', () => {
             minutes.textContent = getZero(t.minutes);
             seconds.textContent = getZero(t.seconds);
 
-            if (t.total <= 0 ) {
+            if (t.total <= 0) {
                 clearInterval(timeInterval);
             }
         }
     }
 
-    setClock('.timer', deadline)
+    setClock('.timer', deadline);
+
+    //   MODAL WINDOW
+
+    const modalTrigger = document.querySelectorAll('[data-modal]');
+    const modal = document.querySelector('.modal');
+    const modalCloseBtn = document.querySelector('[data-close]');
+
+    modalTrigger.forEach(btn => {
+        btn.addEventListener('click', openModal);
+    })
+
+
+    function openModal() {
+        modal.classList.add('show');
+        document.body.style.overflow = 'hidden';
+        clearInterval(modalTimerId)
+    }
+
+    function closeModal() {
+        // modal.classList.add('hide');
+        // modal.classList.remove('show');
+        modal.classList.remove('show');
+        document.body.style.overflow = '';
+        console.log('clock esc')
+    }
+
+
+    modalCloseBtn.addEventListener('click', closeModal);
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            closeModal()
+        }
+    })
+
+    document.addEventListener('keydown', (e) => {
+        if (e.code === 'Escape' && modal.classList.contains('show')) {
+            closeModal()
+        }
+    })
+
+    const modalTimerId = setTimeout(openModal, 12000)
+
+    function showModalByScroll() {
+        if (window.pageYOffset + document.documentElement.clientHeight >= document.documentElement.scrollHeight) {
+            openModal();
+            window.removeEventListener('scroll', showModalByScroll);
+        }
+    }
+
+    window.addEventListener('scroll', showModalByScroll)
 
 })
